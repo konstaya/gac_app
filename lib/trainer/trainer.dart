@@ -1,0 +1,1 @@
+export 'view/trainer_view.dart';
