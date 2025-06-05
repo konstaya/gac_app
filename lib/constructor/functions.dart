@@ -60,7 +60,7 @@ Widget __club_card(BuildContext context, verticalMargin, fontSize ){
     ),
   );
 }
-Widget __nearest_record(BuildContext context, Map<String, dynamic> parameters){
+Widget __nearest_record(BuildContext context, fontSize, showCoach){
   return Column(
     children: [
       Row(
@@ -72,7 +72,7 @@ Widget __nearest_record(BuildContext context, Map<String, dynamic> parameters){
               'Ближайшая запись',
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
-                fontSize: parameters['fontSize'] ?? 20,
+                fontSize: fontSize ?? 20,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -159,63 +159,73 @@ Widget __nearest_record(BuildContext context, Map<String, dynamic> parameters){
                     ),
                   ],
                 ),
-                Container(
-                  margin: EdgeInsets.only(top: 15),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: Theme.of(context).colorScheme.primary,
-                            width: 2,
+                Builder(
+                    builder: (context) {
+                      if (showCoach == true) {
+                        return Container(
+                          margin: EdgeInsets.only(top: 15),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    width: 2,
+                                  ),
+                                ),
+                                child: CircleAvatar(
+                                  radius: 25,
+                                  backgroundImage: NetworkImage('https://example.com/trainer.jpg'),
+                                  backgroundColor: Colors.transparent,
+                                  foregroundColor: Colors.transparent,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      image: DecorationImage(
+                                        image: NetworkImage('https://example.com/trainer.jpg'),
+                                        fit: BoxFit.cover,
+                                        alignment: Alignment.topCenter,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(left: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Иванов Иван Иванович',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onSurface,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Инструктор йоги',
+                                      style: TextStyle(
+                                        color: Theme.of(context).colorScheme.onSurface,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+
+                            ],
                           ),
-                        ),
-                        child: CircleAvatar(
-                          radius: 25,
-                          backgroundImage: NetworkImage('https://example.com/trainer.jpg'),
-                          backgroundColor: Colors.transparent,
-                          foregroundColor: Colors.transparent,
-                          child: Container(
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              image: DecorationImage(
-                                image: NetworkImage('https://example.com/trainer.jpg'),
-                                fit: BoxFit.cover,
-                                alignment: Alignment.topCenter,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: EdgeInsets.only(left: 10),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Иванов Иван Иванович',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
-                            Text(
-                              'Инструктор йоги',
-                              style: TextStyle(
-                                color: Theme.of(context).colorScheme.onSurface,
-                                fontSize: 14,
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                        );
+                      }
+                      else {
+                        return Container();
+                      }
+                    }
                 ),
               ],
             ),
@@ -225,6 +235,71 @@ Widget __nearest_record(BuildContext context, Map<String, dynamic> parameters){
     ],
   );
 }
+Widget __buildButton(context, {required String title, required String subtitle, required String assetPath}) {
+  return Container(
+
+    margin: EdgeInsets.only(top: 8),
+    padding: EdgeInsets.fromLTRB(16, 16, 16, 0),
+    width: (MediaQuery.of(context).size.width * 0.95-8)/2,
+    decoration: BoxDecoration(
+      color: Theme.of(context).colorScheme.surfaceContainer,
+      borderRadius: BorderRadius.all(Radius.circular(10)),
+    ),
+    height: 200,
+    child: Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Text(
+              subtitle,
+              style: const TextStyle(
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Center(
+
+          child: ClipRect(
+            child: Align(
+              heightFactor: 1,
+              alignment: Alignment.topCenter,
+              child: Image.asset(
+                assetPath,
+                width: 120,
+                height: 100,
+
+              ),
+            ),
+          ),
+
+        ),
+      ],
+    ),
+  );
+}
+Widget __buidButton2(context,{required String title1, required String subtitle1,required String title2, required String subtitle2 }){
+  return Row(
+    spacing: 8,
+    children: [
+      Expanded(
+          child: buildButton(context, title: title1, subtitle: subtitle1,  assetPath: 'assets/coach.png')),
+      Expanded(
+          child: buildButton(context, title: title2, subtitle: subtitle2, assetPath: 'assets/gymapp.png'))
+    ],
+  );}
 
 Widget club_card(BuildContext context, Map<String, dynamic> parameters ){
   return Container(
@@ -469,7 +544,8 @@ Widget f(context){
 Widget f1(context){
   return Center(child: Container(margin: EdgeInsets.only(top: 8), decoration: BoxDecoration(borderRadius: BorderRadius.circular(14), color: Theme.of(context).colorScheme.secondaryContainer), child: Column(children: [Container(margin: EdgeInsets.fromLTRB(16, 16, 16, 16), child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [Row(children: [Text('клубная карта', style: TextStyle(color: Theme.of(context).colorScheme.onSecondaryContainer, fontSize: 20, fontWeight: FontWeight.w700))]), Row(children: [Container(width: 78, height: 24, decoration: BoxDecoration(color: Theme.of(context).colorScheme.primary, borderRadius: BorderRadius.circular(12)), child: Center(child: Text('0001', style: TextStyle(color: Theme.of(context).colorScheme.onPrimary, fontSize: 16)))), Icon(Icons.keyboard_double_arrow_right_outlined, color: Theme.of(context).colorScheme.primary)])]))])));
 }
-Widget all_trainer_button(context){
+
+Widget all_trainer_button(BuildContext context, Map<String, dynamic> parameters){
   return Container(
     margin: EdgeInsets.fromLTRB(0, 16, 0, 0),
     height: 56,
@@ -484,20 +560,22 @@ Widget all_trainer_button(context){
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Наши тренеры',
+            parameters['caption'] ?? 'Наши тренеры',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
           ),
-          Text('Профессионалы своего дела')
+          Text(
+              parameters['description'] ?? 'Профессионалы своего дела'
+          )
         ],
       ),
     ),
   );
 }
-Widget record(context){
+Widget record(BuildContext context, Map<String, dynamic> parameters){
   return Container(
     height: 56,
     width: MediaQuery.of(context).size.width * 0.95,
@@ -512,14 +590,16 @@ Widget record(context){
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            'Записаться',
+            parameters['caption'] ??'Записаться',
             style: TextStyle(
               color: Theme.of(context).colorScheme.onPrimaryContainer,
               fontSize: 20,
               fontWeight: FontWeight.w600,
             ),
           ),
-          Text('Подай заявку на персональный тренинг')
+          Text(
+              parameters['description'] ??'Подай заявку на персональный тренинг'
+          )
 
         ],
       ),
@@ -527,7 +607,8 @@ Widget record(context){
   );
 }
 
-Widget buildButton(context, {required String title, required String subtitle, required String assetPath}) {
+
+Widget buildButton(BuildContext context, Map<String, dynamic> parameters) {
   return Container(
 
     margin: EdgeInsets.only(top: 8),
@@ -547,14 +628,14 @@ Widget buildButton(context, {required String title, required String subtitle, re
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+              parameters['title'] ?? 'Тренеры',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
-              subtitle,
+              parameters['subtitle'] ?? 'Профессионалы',
               style: const TextStyle(
                 fontSize: 12,
               ),
@@ -569,7 +650,7 @@ Widget buildButton(context, {required String title, required String subtitle, re
               heightFactor: 1,
               alignment: Alignment.topCenter,
               child: Image.asset(
-                assetPath,
+                parameters['assetPath'] ?? 'assets/coach.png',
                 width: 120,
                 height: 100,
 
@@ -582,8 +663,15 @@ Widget buildButton(context, {required String title, required String subtitle, re
     ),
   );
 }
-Widget buidButton2(context,
-    {required String title1, required String subtitle1,required String title2, required String subtitle2 }){return Row(
+
+Widget buildButton2(BuildContext context, Map<String, dynamic> parameters){
+  var title1 = parameters['title1'];
+  var title2 = parameters['title2'];
+  var subtitle1 = parameters['subtitle1'];
+  var subtitle2 = parameters['subtitle2'];
+  
+  
+  return Row(
   spacing: 8,
   children: [
     Expanded(
@@ -593,3 +681,17 @@ Widget buidButton2(context,
   ],
 );}
 
+Widget baseText(BuildContext context, Map<String, dynamic> parameters){
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: parameters['verticalMargin'] ?? 8,),
+    child: Text(
+      parameters['text'] ?? 'Текст',
+      style: TextStyle(
+        color: Theme.of(context).colorScheme.onSecondaryContainer,
+        fontSize: parameters['fontSize'] ?? 20,
+        fontWeight: FontWeight.w400,
+      ),
+
+    )
+);
+}
